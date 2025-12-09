@@ -1,59 +1,319 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# PHP_Laravel12_Create_Webhook
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://img.shields.io/badge/Laravel-12.x-f72c1f?style=for-the-badge&logo=laravel" />
+  <img src="https://img.shields.io/badge/Webhook-Receiver-blue?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Advanced-Security-success?style=for-the-badge" />
 </p>
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+##  Overview  
+This Laravel 12 project demonstrates how to build a **secure webhook endpoint** that receives JSON data from external services like Stripe, Razorpay, WhatsApp API, Firebase, ShipRocket, etc.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+The system includes:  
+✔ Secret-key authentication  
+✔ Payload logging  
+✔ JSON database storage  
+✔ API-based routing  
+✔ Postman testing support  
+✔ Troubleshooting guide  
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+#  Features  
+- Secure Secret Key Validation  
+- Store webhook payload into database  
+- Log complete payload for debugging  
+- API route-based architecture  
+- JSON casting using Eloquent  
+- Works with all external webhook senders  
+- Laravel 12 routing support enabled  
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+#  Folder Structure  
+```
+app/
+│── Http/
+│   └── Controllers/
+│       └── WebhookController.php
+│
+│── Models/
+│   └── WebhookLog.php
+│
+bootstrap/
+└── app.php         # API routes enabled
 
-## Laravel Sponsors
+config/
+└── services.php    # Webhook secret mapping
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+database/
+└── migrations/
+    └── create_webhook_logs_table.php
 
-### Premium Partners
+routes/
+└── api.php
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+.env
+README.md
+```
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#  Step 1 — Install Laravel  
+```bash
+composer create-project laravel/laravel webhook-app
+```
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+#  Step 2 — Setup ENV Variables  
 
-## Security Vulnerabilities
+Add database + webhook secret key:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=webhook
+DB_USERNAME=root
+DB_PASSWORD=
 
-## License
+WEBHOOK_SECRET=D2QuHpxAiPuRYY95pwnRPUGTlohshCYTu75DCwDe
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+✔ Secret key MUST match the header sent by webhook provider.
+
+---
+
+#  Step 3 — Enable API Routes (Laravel 12 IMPORTANT)  
+
+ **bootstrap/app.php**
+
+```php
+return Application::configure(basePath: dirname(__DIR__))
+    ->withRouting(
+        web: __DIR__.'/../routes/web.php',
+        api: __DIR__.'/../routes/api.php',
+        commands: __DIR__.'/../routes/console.php',
+        health: '/up',
+    )
+    ->withMiddleware(function (Middleware $middleware): void {
+        //
+    })
+    ->withExceptions(function (Exceptions $exceptions): void {
+        //
+    })->create();
+```
+
+ If you skip this step → `/api/webhook` route will not load.
+
+---
+
+#  Step 4 — Create Webhook Route  
+
+ **routes/api.php**
+
+```php
+use App\Http\Controllers\WebhookController;
+
+Route::post('/webhook', [WebhookController::class, 'handle']);
+```
+
+Webhook URL becomes:
+
+```
+POST http://127.0.0.1:8000/api/webhook
+```
+
+---
+
+#  Step 5 — Create Webhook Controller  
+
+ **app/Http/Controllers/WebhookController.php**
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Models\WebhookLog;
+
+class WebhookController extends Controller
+{
+    public function handle(Request $request)
+    {
+        $secret = config('services.webhook_secret');
+
+        // Secret Key Validation
+        if ($request->header('X-Webhook-Secret') !== $secret) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        // Log Payload
+        Log::info('Webhook received:', $request->all());
+
+        // Store into DB
+        WebhookLog::create([
+            'payload' => $request->all(),
+        ]);
+
+        return response()->json(['status' => 'success']);
+    }
+}
+```
+
+✔ Logs payload  
+✔ Validates secret  
+✔ Saves JSON to DB  
+
+---
+
+#  Step 6 — Add Webhook Secret Config  
+
+ **config/services.php**
+
+```php
+'webhook_secret' => env('WEBHOOK_SECRET'),
+```
+
+---
+
+#  Step 7 — Create Model & Migration  
+
+### Create model:
+```bash
+php artisan make:model WebhookLog -m
+```
+
+---
+
+ **database/migrations/create_webhook_logs_table.php**
+
+```php
+Schema::create('webhook_logs', function (Blueprint $table) {
+    $table->id();
+    $table->json('payload'); // store full JSON
+    $table->timestamps();
+});
+```
+
+---
+
+ **app/Models/WebhookLog.php**
+
+```php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class WebhookLog extends Model
+{
+    protected $fillable = ['payload'];
+
+    protected $casts = [
+        'payload' => 'array',
+    ];
+}
+```
+
+Run migration:
+
+```bash
+php artisan migrate
+```
+
+---
+
+#  Step 8 — Testing Webhook with Postman  
+
+### URL  
+```
+POST http://127.0.0.1:8000/api/webhook
+```
+
+### Required Headers:
+| Header Name       | Value |
+|------------------|--------|
+| X-Webhook-Secret | Your secret key |
+| Content-Type     | application/json |
+
+### Sample Body:
+```json
+{
+  "event": "order.created",
+  "order_id": 151,
+  "status": "paid"
+}
+```
+
+Expected Response:
+```json
+{
+  "status": "success"
+}
+```
+
+---
+
+#  Where Is Webhook Data Saved?
+
+### ✔ Log file  
+Location:  
+`storage/logs/laravel.log`
+
+### ✔ Database  
+Table:  
+`webhook_logs`
+
+Payload saved exactly as JSON.
+
+---
+
+#  Troubleshooting Guide  
+
+###  403 Unauthorized  
+Reason: Secret header mismatch  
+Fix:
+```bash
+php artisan config:clear
+```
+
+---
+
+###  Route Not Found  
+Reason: API routing not enabled  
+Fix: Update `bootstrap/app.php`
+
+---
+
+###  Payload not stored  
+Reason: Migration not run  
+Fix:
+```bash
+php artisan migrate
+```
+
+---
+
+#  Final Result  
+
+✔ Secure webhook receiver ready  
+✔ JSON stored + logged  
+✔ Perfect for payment gateways, shipping APIs, OTP services, etc.  
+
+
+###SCREENSHOTS:-
+
+<img width="1795" height="634" alt="Screenshot 2025-12-09 165649" src="https://github.com/user-attachments/assets/f236de43-29e4-475e-8f33-0824e21c7837" />
+
+
+<img width="894" height="279" alt="Screenshot 2025-12-09 172257" src="https://github.com/user-attachments/assets/454d56aa-e4b3-4074-a0a4-ade60c9e9843" />
+
+
+
