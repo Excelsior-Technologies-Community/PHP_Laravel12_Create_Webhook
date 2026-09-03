@@ -35,7 +35,20 @@ return [
         ],
     ],
        
-    //Webhook Code
+    // Webhook — general secret (backward compatible)
     'webhook_secret' => env('WEBHOOK_SECRET'),
+
+    // Multi-source webhook secrets
+    'webhooks' => [
+        'stripe' => [
+            'secret' => env('WEBHOOK_SECRET_STRIPE'),
+        ],
+        'razorpay' => [
+            'secret' => env('WEBHOOK_SECRET_RAZORPAY'),
+        ],
+        'whatsapp' => [
+            'secret' => env('WEBHOOK_SECRET_WHATSAPP'),
+        ],
+    ],
 
 ];

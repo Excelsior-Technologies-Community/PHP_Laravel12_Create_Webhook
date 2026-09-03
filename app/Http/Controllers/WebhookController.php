@@ -5,46 +5,52 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\WebhookLog;
+use App\Jobs\ProcessWebhookJob;
 
 class WebhookController extends Controller
 {
-    /**
-     * Handle incoming webhook requests.
-     * This method validates the secret key, logs the payload,
-     * and stores it inside the database.
-     */
-    public function handle(Request $request)
-    {
-        // Load secret key from configuration
-        $secret = config('services.webhook_secret');
+    // Allowed events per source (empty array = allow all)
+    protected array $allowedEvents = [
+        'stripe'    => ['payment.success', 'payment.failed', 'order.created'],
+        'razorpay'  => ['payment.captured', 'payment.failed'],
+        'whatsapp'  => ['message.received', 'message.delivered'],
+        'general'   => [],
+    ];
 
-        /*
-        |--------------------------------------------------------------------------
-        | Security Check
-        |--------------------------------------------------------------------------
-        | The external service must send the secret key in this header:
-        |    X-Webhook-Secret: <your_secret_key>
-        | If the header value does not match, the request will be rejected.
-        */
+    public function handle(Request $request, string $source = 'general')
+    {
+        // Validate secret key for the given source
+        $secret = config("services.webhooks.{$source}.secret")
+                  ?? config('services.webhook_secret');
+
         if ($request->header('X-Webhook-Secret') !== $secret) {
+            Log::warning("Webhook unauthorized for source: {$source}");
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
-        // Log webhook payload to laravel.log for debugging
-        Log::info('Webhook received:', $request->all());
+        $payload   = $request->all();
+        $eventType = $payload['event'] ?? null;
 
-        /*
-        |--------------------------------------------------------------------------
-        | Save webhook payload to database
-        |--------------------------------------------------------------------------
-        | Storing the payload allows viewing webhook history in admin panel,
-        | reprocessing failed webhook attempts, and debugging.
-        */
-        WebhookLog::create([
-            'payload' => $request->all(),
+        // Event filtering — reject events not in allowed list
+        $allowed = $this->allowedEvents[$source] ?? [];
+        if (!empty($allowed) && !in_array($eventType, $allowed)) {
+            Log::info("Webhook event '{$eventType}' ignored for source: {$source}");
+            return response()->json(['status' => 'ignored', 'reason' => 'event not allowed']);
+        }
+
+        Log::info("Webhook received [{$source}]:", $payload);
+
+        // Store with status = pending
+        $log = WebhookLog::create([
+            'payload'    => $payload,
+            'source'     => $source,
+            'event_type' => $eventType,
+            'status'     => 'pending',
         ]);
 
-        // Return success response to the webhook sender
-        return response()->json(['status' => 'success']);
+        // Dispatch to queue for background processing
+        ProcessWebhookJob::dispatch($log);
+
+        return response()->json(['status' => 'queued', 'id' => $log->id]);
     }
 }
