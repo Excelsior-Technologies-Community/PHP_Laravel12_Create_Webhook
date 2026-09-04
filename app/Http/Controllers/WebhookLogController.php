@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\WebhookLog;
 use App\Jobs\ProcessWebhookJob;
+use Illuminate\Http\Request;
 
 class WebhookLogController extends Controller
 {
-    // GET /api/webhook-logs
+    /*
+    |--------------------------------------------------------------------------
+    | List Webhook Logs
+    |--------------------------------------------------------------------------
+    */
+
     public function index(Request $request)
     {
         $query = WebhookLog::latest();
@@ -16,28 +21,61 @@ class WebhookLogController extends Controller
         if ($request->filled('status')) {
             $query->byStatus($request->status);
         }
+
         if ($request->filled('source')) {
             $query->bySource($request->source);
         }
+
         if ($request->filled('event_type')) {
             $query->byEvent($request->event_type);
         }
+
         if ($request->filled('date')) {
             $query->byDate($request->date);
         }
 
-        return response()->json($query->paginate(20));
+        if ($request->filled('duplicate')) {
+
+            $query->where(
+                'is_duplicate',
+                $request->duplicate === 'yes'
+            );
+        }
+
+        return response()->json(
+            $query->paginate(20)
+        );
     }
 
-    // POST /api/webhook-logs/{id}/replay
+    /*
+    |--------------------------------------------------------------------------
+    | Replay Webhook
+    |--------------------------------------------------------------------------
+    */
+
     public function replay(int $id)
     {
         $log = WebhookLog::findOrFail($id);
 
-        $log->update(['status' => 'pending', 'retry_count' => 0, 'error_message' => null]);
+        if ($log->is_duplicate) {
+
+            return response()->json([
+                'error' => 'Duplicate webhook cannot be replayed directly.',
+            ], 422);
+        }
+
+        $log->update([
+            'status' => 'pending',
+            'retry_count' => 0,
+            'error_message' => null,
+            'processed_at' => null,
+        ]);
 
         ProcessWebhookJob::dispatch($log);
 
-        return response()->json(['status' => 'replayed', 'id' => $log->id]);
+        return response()->json([
+            'status' => 'replayed',
+            'id' => $log->id,
+        ]);
     }
 }
