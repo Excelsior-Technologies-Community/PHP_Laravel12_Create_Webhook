@@ -36,32 +36,50 @@ class WebhookLog extends Model
 
     public function scopeByStatus($query, $status)
     {
-        return $query->where('status', $status);
+        return $query->where(
+            'status',
+            $status
+        );
     }
 
     public function scopeBySource($query, $source)
     {
-        return $query->where('source', $source);
+        return $query->where(
+            'source',
+            $source
+        );
     }
 
     public function scopeByEvent($query, $event)
     {
-        return $query->where('event_type', $event);
+        return $query->where(
+            'event_type',
+            $event
+        );
     }
 
     public function scopeByDate($query, $date)
     {
-        return $query->whereDate('created_at', $date);
+        return $query->whereDate(
+            'created_at',
+            $date
+        );
     }
 
     public function scopeDuplicates($query)
     {
-        return $query->where('is_duplicate', true);
+        return $query->where(
+            'is_duplicate',
+            true
+        );
     }
 
     public function scopeOriginals($query)
     {
-        return $query->where('is_duplicate', false);
+        return $query->where(
+            'is_duplicate',
+            false
+        );
     }
 
     /*
@@ -72,11 +90,17 @@ class WebhookLog extends Model
 
     public function originalWebhook()
     {
-        return $this->belongsTo(self::class, 'duplicate_of');
+        return $this->belongsTo(
+            self::class,
+            'duplicate_of'
+        );
     }
 
     public function duplicates()
     {
-        return $this->hasMany(self::class, 'duplicate_of');
+        return $this->hasMany(
+            self::class,
+            'duplicate_of'
+        );
     }
 }

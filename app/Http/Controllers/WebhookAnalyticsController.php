@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\DB;
 
 class WebhookAnalyticsController extends Controller
 {
+    /**
+     * Webhook Analytics Dashboard
+     */
     public function index()
     {
         /*
@@ -17,23 +20,42 @@ class WebhookAnalyticsController extends Controller
 
         $total = WebhookLog::count();
 
-        $processed = WebhookLog::where('status', 'processed')
+        $processed = WebhookLog::where(
+            'status',
+            'processed'
+        )
             ->where('is_duplicate', false)
             ->count();
 
-        $pending = WebhookLog::where('status', 'pending')
+        $pending = WebhookLog::where(
+            'status',
+            'pending'
+        )
             ->where('is_duplicate', false)
             ->count();
 
-        $failed = WebhookLog::where('status', 'failed')
+        $failed = WebhookLog::where(
+            'status',
+            'failed'
+        )
             ->where('is_duplicate', false)
             ->count();
 
-        $duplicates = WebhookLog::where('is_duplicate', true)
-            ->count();
+        $duplicates = WebhookLog::where(
+            'is_duplicate',
+            true
+        )->count();
 
-        $originalTotal = WebhookLog::where('is_duplicate', false)
-            ->count();
+        /*
+        |--------------------------------------------------------------------------
+        | Original Webhooks
+        |--------------------------------------------------------------------------
+        */
+
+        $originalTotal = WebhookLog::where(
+            'is_duplicate',
+            false
+        )->count();
 
         /*
         |--------------------------------------------------------------------------
@@ -42,11 +64,23 @@ class WebhookAnalyticsController extends Controller
         */
 
         $successRate = $originalTotal > 0
-            ? round(($processed / $originalTotal) * 100, 2)
+            ? round(
+                ($processed / $originalTotal) * 100,
+                2
+            )
             : 0;
 
+        /*
+        |--------------------------------------------------------------------------
+        | Failure Rate
+        |--------------------------------------------------------------------------
+        */
+
         $failureRate = $originalTotal > 0
-            ? round(($failed / $originalTotal) * 100, 2)
+            ? round(
+                ($failed / $originalTotal) * 100,
+                2
+            )
             : 0;
 
         /*
@@ -76,15 +110,32 @@ class WebhookAnalyticsController extends Controller
 
         /*
         |--------------------------------------------------------------------------
+        | This Month
+        |--------------------------------------------------------------------------
+        */
+
+        $thisMonth = WebhookLog::whereBetween(
+            'created_at',
+            [
+                now()->startOfMonth(),
+                now()->endOfMonth(),
+            ]
+        )->count();
+
+        /*
+        |--------------------------------------------------------------------------
         | Source Statistics
         |--------------------------------------------------------------------------
         */
 
         $sourceStats = WebhookLog::select(
-                'source',
-                DB::raw('COUNT(*) as total')
+            'source',
+            DB::raw('COUNT(*) as total')
+        )
+            ->where(
+                'is_duplicate',
+                false
             )
-            ->where('is_duplicate', false)
             ->groupBy('source')
             ->orderByDesc('total')
             ->get();
@@ -96,14 +147,17 @@ class WebhookAnalyticsController extends Controller
         */
 
         $eventStats = WebhookLog::select(
-                'event_type',
-                DB::raw('COUNT(*) as total')
+            'event_type',
+            DB::raw('COUNT(*) as total')
+        )
+            ->where(
+                'is_duplicate',
+                false
             )
-            ->where('is_duplicate', false)
             ->whereNotNull('event_type')
             ->groupBy('event_type')
             ->orderByDesc('total')
-            ->limit(10)
+            ->limit(5)
             ->get();
 
         /*
@@ -113,10 +167,15 @@ class WebhookAnalyticsController extends Controller
         */
 
         $statusStats = [
+
             'processed' => $processed,
+
             'pending' => $pending,
+
             'failed' => $failed,
+
             'duplicates' => $duplicates,
+
         ];
 
         /*
@@ -126,8 +185,30 @@ class WebhookAnalyticsController extends Controller
         */
 
         $recentWebhooks = WebhookLog::latest()
-            ->limit(10)
+            ->limit(5)
             ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Average Retry Count
+        |--------------------------------------------------------------------------
+        */
+
+        $averageRetries = WebhookLog::where(
+            'is_duplicate',
+            false
+        )->avg('retry_count');
+
+        $averageRetries = round(
+            $averageRetries ?? 0,
+            2
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Return View
+        |--------------------------------------------------------------------------
+        */
 
         return view(
             'webhook.analytics',
@@ -137,14 +218,17 @@ class WebhookAnalyticsController extends Controller
                 'pending',
                 'failed',
                 'duplicates',
+                'originalTotal',
                 'successRate',
                 'failureRate',
                 'today',
                 'thisWeek',
+                'thisMonth',
                 'sourceStats',
                 'eventStats',
                 'statusStats',
-                'recentWebhooks'
+                'recentWebhooks',
+                'averageRetries'
             )
         );
     }

@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-    <title>Webhook #{{ $log->id }} Detail</title>
+    <title>
+        Webhook #{{ $log->id }} Detail
+    </title>
 
     <style>
         * {
@@ -18,22 +21,19 @@
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #f0f2f5;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f9;
             color: #333;
         }
 
-        /* =========================
-       Navbar
-    ========================= */
-
         .navbar {
-            background: #1a1a2e;
+            background: #17172b;
             color: white;
-            padding: 16px 32px;
+            padding: 18px 35px;
+
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
         }
 
         .navbar h1 {
@@ -44,59 +44,43 @@
             color: #aab4ff;
             text-decoration: none;
             font-size: 14px;
+            font-weight: 600;
         }
-
-        .navbar a:hover {
-            color: white;
-        }
-
-        /* =========================
-       Container
-    ========================= */
 
         .container {
-            max-width: 900px;
+            max-width: 950px;
             margin: 30px auto;
             padding: 0 20px;
         }
 
-        /* =========================
-       Cards
-    ========================= */
-
         .card {
             background: white;
             border-radius: 10px;
-            padding: 28px 32px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+            padding: 26px;
             margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .07);
         }
 
         .card h2 {
-            font-size: 17px;
-            margin-bottom: 18px;
-            color: #1a1a2e;
+            color: #17172b;
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
             border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
         }
-
-        /* =========================
-       Meta Grid
-    ========================= */
 
         .meta-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            gap: 20px;
         }
 
         .meta-item label {
-            font-size: 12px;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
             display: block;
-            margin-bottom: 4px;
+            color: #888;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
         }
 
         .meta-item span {
@@ -104,16 +88,12 @@
             font-weight: 600;
         }
 
-        /* =========================
-       Badges
-    ========================= */
-
         .badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 13px !important;
-            font-weight: 600;
             display: inline-block;
+            padding: 5px 11px;
+            border-radius: 20px;
+            font-size: 12px !important;
+            font-weight: 700 !important;
         }
 
         .badge-pending {
@@ -137,93 +117,69 @@
         }
 
         .badge-duplicate {
-            background: #eee8ff;
-            color: #6c3483;
+            background: #eee2ff;
+            color: #7b2cbf;
         }
 
         .badge-original {
-            background: #d1f2eb;
-            color: #0e6655;
+            background: #e8f5e9;
+            color: #2e7d32;
         }
 
-        /* =========================
-       Duplicate Information
-    ========================= */
-
         .duplicate-box {
-            background: #eee8ff;
+            background: #f6efff;
             border-left: 4px solid #7b2cbf;
-            padding: 14px 18px;
-            border-radius: 6px;
+            padding: 16px;
+            border-radius: 7px;
             color: #6c3483;
-            font-size: 14px;
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
         .duplicate-box a {
             color: #4361ee;
-            font-weight: 600;
             text-decoration: none;
+            font-weight: 700;
         }
-
-        .duplicate-box a:hover {
-            text-decoration: underline;
-        }
-
-        /* =========================
-       Error Message
-    ========================= */
 
         .error-box {
             background: #fde8e8;
             border-left: 4px solid #e63946;
-            padding: 14px 18px;
-            border-radius: 6px;
+            padding: 16px;
+            border-radius: 7px;
             color: #c0392b;
-            font-size: 14px;
             line-height: 1.6;
         }
-
-        /* =========================
-       Payload
-    ========================= */
 
         pre {
             background: #1e1e2e;
             color: #cdd6f4;
             padding: 20px;
             border-radius: 8px;
-            font-size: 14px;
             overflow-x: auto;
-            line-height: 1.6;
             white-space: pre-wrap;
             word-break: break-word;
+            line-height: 1.6;
+            font-size: 13px;
         }
-
-        /* =========================
-       Actions
-    ========================= */
 
         .actions {
             display: flex;
-            gap: 12px;
-            margin-top: 10px;
-            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
         }
 
         .btn {
-            padding: 10px 22px;
-            border: none;
+            padding: 10px 18px;
             border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
             text-decoration: none;
-            display: inline-block;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
         }
 
         .btn-back {
-            background: #eee;
+            background: #e9ecef;
             color: #555;
         }
 
@@ -232,45 +188,26 @@
             color: #333;
         }
 
-        .btn:hover {
-            opacity: 0.85;
-        }
-
-        /* =========================
-       Duplicate Replay Notice
-    ========================= */
-
         .no-replay {
-            background: #f8f5ff;
-            color: #6c3483;
-            border: 1px solid #e3d5ff;
-            padding: 10px 16px;
+            padding: 10px 15px;
             border-radius: 6px;
+            background: #f6efff;
+            color: #6c3483;
             font-size: 13px;
             font-weight: 600;
         }
 
-        /* =========================
-       Responsive
-    ========================= */
-
-        @media (max-width: 700px) {
+        @media(max-width:700px) {
 
             .navbar {
-                padding: 14px 18px;
-                gap: 12px;
+                padding: 15px;
             }
 
             .navbar h1 {
                 font-size: 17px;
             }
 
-            .navbar a {
-                font-size: 13px;
-            }
-
             .container {
-                margin: 20px auto;
                 padding: 0 12px;
             }
 
@@ -280,12 +217,10 @@
 
             .meta-grid {
                 grid-template-columns: 1fr;
-                gap: 14px;
             }
 
             .actions {
                 flex-direction: column;
-                align-items: stretch;
             }
 
             .actions .btn,
@@ -299,48 +234,45 @@
 
         }
     </style>
-    
 
 </head>
 
 <body>
 
+
+    <!-- Navbar -->
+
     <div class="navbar">
 
-        
         <h1>
             🔔 Webhook #{{ $log->id }} Detail
         </h1>
 
         <a href="{{ route('webhook.dashboard') }}">
-            ← Back to Dashboard
+            ← Dashboard
         </a>
-       
 
     </div>
 
+
     <div class="container">
 
-      
-        {{-- =========================
-     Meta Info
-========================== --}}
+
+        <!-- Webhook Info -->
 
         <div class="card">
 
             <h2>
-                📋 Webhook Info
+                📋 Webhook Information
             </h2>
 
             <div class="meta-grid">
 
 
-                {{-- Database ID --}}
-
                 <div class="meta-item">
 
                     <label>
-                        ID
+                        Database ID
                     </label>
 
                     <span>
@@ -350,8 +282,6 @@
                 </div>
 
 
-                {{-- Source --}}
-
                 <div class="meta-item">
 
                     <label>
@@ -359,13 +289,13 @@
                     </label>
 
                     <span class="badge badge-source">
-                        {{ $log->source }}
+
+                        {{ ucfirst($log->source) }}
+
                     </span>
 
                 </div>
 
-
-                {{-- Event Type --}}
 
                 <div class="meta-item">
 
@@ -380,8 +310,6 @@
                 </div>
 
 
-                {{-- Webhook ID --}}
-
                 <div class="meta-item">
 
                     <label>
@@ -395,24 +323,23 @@
                 </div>
 
 
-                {{-- Duplicate Status --}}
-
                 <div class="meta-item">
 
                     <label>
-                        Duplicate
+                        Status
                     </label>
 
                     @if($log->is_duplicate)
 
                     <span class="badge badge-duplicate">
-                        🔁 Yes
+                        🔁 Duplicate
                     </span>
 
                     @else
 
-                    <span class="badge badge-original">
-                        ✓ No
+                    <span
+                        class="badge badge-{{ $log->status }}">
+                        {{ ucfirst($log->status) }}
                     </span>
 
                     @endif
@@ -420,22 +347,28 @@
                 </div>
 
 
-                {{-- Status --}}
-
                 <div class="meta-item">
 
                     <label>
-                        Status
+                        Type
                     </label>
 
-                    <span class="badge badge-{{ $log->status }}">
-                        {{ ucfirst($log->status) }}
+                    @if($log->is_duplicate)
+
+                    <span class="badge badge-duplicate">
+                        Duplicate
                     </span>
+
+                    @else
+
+                    <span class="badge badge-original">
+                        Original
+                    </span>
+
+                    @endif
 
                 </div>
 
-
-                {{-- Retry Count --}}
 
                 <div class="meta-item">
 
@@ -450,8 +383,6 @@
                 </div>
 
 
-                {{-- Received At --}}
-
                 <div class="meta-item">
 
                     <label>
@@ -465,8 +396,6 @@
                 </div>
 
 
-                {{-- Processed At --}}
-
                 <div class="meta-item">
 
                     <label>
@@ -474,10 +403,12 @@
                     </label>
 
                     <span>
+
                         {{ $log->processed_at
-                    ? $log->processed_at->format('d M Y, h:i:s A')
-                    : '—'
-                }}
+                            ? $log->processed_at->format('d M Y, h:i:s A')
+                            : '—'
+                        }}
+
                     </span>
 
                 </div>
@@ -487,9 +418,7 @@
         </div>
 
 
-        {{-- =========================
-     Duplicate Information
-========================== --}}
+        <!-- Duplicate -->
 
         @if($log->is_duplicate)
 
@@ -505,12 +434,9 @@
 
                 @if($log->duplicate_of)
 
-                <br>
-                <br>
+                <br><br>
 
-                <strong>
-                    Original Webhook:
-                </strong>
+                Original Webhook:
 
                 <a
                     href="{{ route('webhook.show', $log->duplicate_of) }}">
@@ -526,20 +452,20 @@
         @endif
 
 
-        {{-- =========================
-     Error Message
-========================== --}}
+        <!-- Error -->
 
         @if($log->error_message)
 
         <div class="card">
 
             <h2>
-                ❌ Error Message
+                ❌ Error Information
             </h2>
 
             <div class="error-box">
+
                 {{ $log->error_message }}
+
             </div>
 
         </div>
@@ -547,32 +473,26 @@
         @endif
 
 
-        {{-- =========================
-     Payload
-========================== --}}
+        <!-- Payload -->
 
         <div class="card">
 
             <h2>
-                📦 Payload
+                📦 Webhook Payload
             </h2>
 
             <pre>{{ json_encode(
-$log->payload,
-JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+                $log->payload,
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+            ) }}</pre>
 
-
-) }}</pre>
-
-           
         </div>
 
 
-        {{-- =========================
-     Actions
-========================== --}}
+        <!-- Actions -->
 
         <div class="actions">
+
 
             <a
                 href="{{ route('webhook.dashboard') }}"
@@ -580,8 +500,6 @@ JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
                 ← Back
             </a>
 
-
-            {{-- Do not replay duplicate webhooks --}}
 
             @if(!$log->is_duplicate)
 
@@ -602,7 +520,9 @@ JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
             @else
 
             <div class="no-replay">
+
                 🔒 Duplicate webhooks cannot be replayed.
+
             </div>
 
             @endif

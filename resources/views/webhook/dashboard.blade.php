@@ -5,7 +5,9 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>Webhook Dashboard</title>
 
@@ -17,198 +19,182 @@
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #f0f2f5;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f9;
             color: #333;
         }
 
-        /* =========================
-           Navbar
-        ========================= */
+        /* Navbar */
 
         .navbar {
-            background: #1a1a2e;
+            background: #17172b;
             color: white;
-            padding: 16px 32px;
+            padding: 18px 35px;
+
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
         }
 
         .navbar h1 {
-            font-size: 20px;
-            letter-spacing: 1px;
+            font-size: 21px;
         }
 
-        .navbar span {
-            font-size: 13px;
-            opacity: 0.6;
-        }
-
-        .navbar-actions {
+        .navbar-right {
             display: flex;
             align-items: center;
             gap: 20px;
         }
 
-        .analytics-link {
+        .navbar-right a {
             color: white;
             text-decoration: none;
-            font-size: 14px;
             font-weight: 600;
+            font-size: 14px;
         }
 
-        .analytics-link:hover {
-            opacity: 0.8;
+        .navbar-right span {
+            font-size: 13px;
+            opacity: .65;
         }
 
-        /* =========================
-           Container
-        ========================= */
+        /* Container */
 
         .container {
-            max-width: 1200px;
+            max-width: 1250px;
             margin: 30px auto;
             padding: 0 20px;
         }
 
-        /* =========================
-           Stats Cards
-        ========================= */
+        /* Alert */
+
+        .alert {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .alert-success {
+            background: #d1f2eb;
+            color: #0e6655;
+        }
+
+        .alert-error {
+            background: #fde8e8;
+            color: #c0392b;
+        }
+
+        /* Stats */
 
         .stats {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 16px;
-            margin-bottom: 28px;
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
-        .card {
+        .stat-card {
             background: white;
+            padding: 22px;
             border-radius: 10px;
-            padding: 20px 24px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-            border-left: 4px solid #ccc;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .07);
+            border-left: 5px solid #4361ee;
         }
 
-        .card.total {
-            border-color: #4361ee;
-        }
-
-        .card.pending {
+        .stat-card.pending {
             border-color: #f4a261;
         }
 
-        .card.processed {
+        .stat-card.processed {
             border-color: #2ec4b6;
         }
 
-        .card.failed {
+        .stat-card.failed {
             border-color: #e63946;
         }
 
-        .card.duplicates {
+        .stat-card.duplicate {
             border-color: #7b2cbf;
         }
 
-        .card .num {
+        .stat-number {
             font-size: 32px;
             font-weight: 700;
-            margin-bottom: 4px;
+            margin-bottom: 5px;
         }
 
-        .card .label {
-            font-size: 13px;
+        .stat-label {
             color: #888;
+            font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: .8px;
         }
 
-        .card.total .num {
-            color: #4361ee;
-        }
-
-        .card.pending .num {
-            color: #f4a261;
-        }
-
-        .card.processed .num {
-            color: #2ec4b6;
-        }
-
-        .card.failed .num {
-            color: #e63946;
-        }
-
-        .card.duplicates .num {
-            color: #7b2cbf;
-        }
-
-        /* =========================
-           Alert
-        ========================= */
-
-        .alert {
-            background: #d4edda;
-            color: #155724;
-            padding: 12px 18px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        /* =========================
-           Filter Form
-        ========================= */
+        /* Filter */
 
         .filter-box {
             background: white;
+            padding: 22px;
             border-radius: 10px;
-            padding: 20px 24px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-            margin-bottom: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .07);
         }
 
-        .filter-box form {
+        .filter-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: #17172b;
+        }
+
+        .filter-form {
             display: flex;
-            gap: 12px;
             flex-wrap: wrap;
-            align-items: flex-end;
+            gap: 12px;
+            align-items: end;
         }
 
-        .filter-box label {
-            font-size: 12px;
-            color: #666;
+        .form-group {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .form-group label {
             display: block;
-            margin-bottom: 4px;
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 6px;
+            font-weight: 600;
         }
 
-        .filter-box select,
-        .filter-box input {
-            padding: 8px 12px;
+        input,
+        select {
+            width: 100%;
+            padding: 10px 12px;
             border: 1px solid #ddd;
             border-radius: 6px;
             font-size: 14px;
-            min-width: 140px;
             background: white;
         }
 
-        .filter-box select:focus,
-        .filter-box input:focus {
+        input:focus,
+        select:focus {
             outline: none;
             border-color: #4361ee;
         }
 
-        /* =========================
-           Buttons
-        ========================= */
+        /* Buttons */
 
         .btn {
-            padding: 9px 20px;
+            padding: 10px 16px;
             border: none;
             border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
+            text-decoration: none;
+            font-size: 13px;
             font-weight: 600;
+            cursor: pointer;
+            display: inline-block;
         }
 
         .btn-primary {
@@ -219,23 +205,39 @@
         .btn-secondary {
             background: #eee;
             color: #555;
-            text-decoration: none;
-            display: inline-block;
+        }
+
+        .btn-view {
+            background: #e8f4fd;
+            color: #2980b9;
+        }
+
+        .btn-replay {
+            background: #fff3cd;
+            color: #856404;
         }
 
         .btn:hover {
-            opacity: 0.88;
+            opacity: .85;
         }
 
-        /* =========================
-           Table
-        ========================= */
+        /* Table */
 
         .table-box {
             background: white;
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
             overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .07);
+        }
+
+        .table-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .table-header h2 {
+            font-size: 18px;
+            color: #17172b;
         }
 
         .table-wrapper {
@@ -245,56 +247,44 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 950px;
         }
 
         thead {
-            background: #1a1a2e;
+            background: #17172b;
             color: white;
         }
 
         th {
-            padding: 13px 16px;
+            padding: 14px 15px;
             text-align: left;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
         }
 
         td {
-            padding: 12px 16px;
+            padding: 13px 15px;
+            border-bottom: 1px solid #eee;
             font-size: 14px;
-            border-bottom: 1px solid #f0f0f0;
-            white-space: nowrap;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
         }
 
         tr:hover td {
             background: #fafbff;
         }
 
-        /* Duplicate row */
-
-        tr.duplicate-row td {
+        .duplicate-row td {
             background: #faf5ff;
         }
 
-        tr.duplicate-row:hover td {
-            background: #f3e8ff;
-        }
-
-        /* =========================
-           Badges
-        ========================= */
+        /* Badge */
 
         .badge {
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
             display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
         }
 
         .badge-pending {
@@ -327,83 +317,66 @@
             color: #2e7d32;
         }
 
-        /* =========================
-           Actions
-        ========================= */
+        /* Actions */
 
         .actions {
             display: flex;
-            gap: 8px;
+            gap: 7px;
         }
 
-        .btn-sm {
-            padding: 5px 12px;
-            font-size: 12px;
+        .btn-small {
+            padding: 6px 10px;
             border-radius: 5px;
             border: none;
             cursor: pointer;
+            text-decoration: none;
+            font-size: 11px;
             font-weight: 600;
         }
 
-        .btn-view {
-            background: #e8f4fd;
-            color: #2980b9;
-            text-decoration: none;
-        }
+        /* Pagination */
 
-        .btn-replay {
-            background: #fef9e7;
-            color: #d68910;
-        }
-
-        .btn-replay:hover {
-            background: #f4d03f;
-            color: #333;
-        }
-
-        /* =========================
-           Pagination
-        ========================= */
-
-        .pagination {
-            padding: 16px 20px;
+        .pagination-wrapper {
+            padding: 18px;
             display: flex;
-            gap: 6px;
-            justify-content: flex-end;
+            justify-content: center;
         }
 
-        .pagination a,
-        .pagination span {
-            padding: 6px 12px;
-            border-radius: 5px;
-            font-size: 13px;
+        .pagination-wrapper nav {
+            display: flex;
+        }
+
+        .pagination-wrapper svg {
+            width: 18px;
+        }
+
+        .pagination-wrapper a,
+        .pagination-wrapper span {
+            padding: 7px 11px;
+            margin: 2px;
             border: 1px solid #ddd;
-            color: #4361ee;
+            border-radius: 5px;
             text-decoration: none;
+            font-size: 13px;
+            color: #4361ee;
         }
 
-        .pagination span.active {
+        .pagination-wrapper span[aria-current="page"] {
             background: #4361ee;
             color: white;
-            border-color: #4361ee;
         }
 
-        /* =========================
-           Empty State
-        ========================= */
+        /* Empty */
 
         .empty {
             text-align: center;
-            padding: 40px;
-            color: #aaa;
-            font-size: 15px;
+            padding: 50px;
+            color: #999;
         }
 
-        /* =========================
-           Responsive
-        ========================= */
+        /* Responsive */
 
-        @media (max-width: 1100px) {
+        @media(max-width: 1100px) {
 
             .stats {
                 grid-template-columns: repeat(3, 1fr);
@@ -411,78 +384,43 @@
 
         }
 
-        @media (max-width: 900px) {
+        @media(max-width: 700px) {
+
+            .navbar {
+                padding: 15px;
+            }
+
+            .navbar-right span {
+                display: none;
+            }
+
+            .container {
+                padding: 0 12px;
+            }
 
             .stats {
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .navbar {
-                padding: 14px 20px;
+            .filter-form {
+                flex-direction: column;
+                align-items: stretch;
             }
 
-            .navbar-actions {
-                gap: 12px;
+            .form-group {
+                width: 100%;
             }
 
         }
 
-        @media (max-width: 600px) {
+        @media(max-width: 450px) {
 
             .stats {
                 grid-template-columns: 1fr;
             }
 
-            .container {
-                padding: 0 12px;
-                margin-top: 20px;
-            }
-
-            .navbar {
-                padding: 14px 16px;
-            }
-
             .navbar h1 {
                 font-size: 17px;
-            }
-
-            .navbar span {
-                display: none;
-            }
-
-            .analytics-link {
-                font-size: 13px;
-            }
-
-            .filter-box {
-                padding: 16px;
-            }
-
-            .filter-box form {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .filter-box form>div {
-                width: 100%;
-            }
-
-            .filter-box select,
-            .filter-box input {
-                width: 100%;
-            }
-
-            .filter-box .btn {
-                width: 100%;
-                margin-bottom: 6px;
-            }
-
-            .table-box {
-                overflow-x: auto;
-            }
-
-            table {
-                min-width: 950px;
             }
 
         }
@@ -492,15 +430,17 @@
 
 <body>
 
+    <!-- Navbar -->
+
     <div class="navbar">
 
-        <h1>🔔 Webhook Dashboard</h1>
+        <h1>
+            🔔 Webhook Dashboard
+        </h1>
 
-        <div class="navbar-actions">
+        <div class="navbar-right">
 
-            <a
-                href="{{ route('webhook.analytics') }}"
-                class="analytics-link">
+            <a href="{{ route('webhook.analytics') }}">
                 📊 Analytics
             </a>
 
@@ -515,94 +455,91 @@
 
     <div class="container">
 
-        {{-- Success Alert --}}
+        <!-- Success -->
+
         @if(session('success'))
 
-        <div class="alert">
+        <div class="alert alert-success">
             ✅ {{ session('success') }}
         </div>
 
         @endif
 
+
+        <!-- Error -->
+
         @if(session('error'))
 
-        <div
-            class="alert"
-            style="
-            background:#fde8e8;
-            color:#c0392b;
-        ">
+        <div class="alert alert-error">
             ❌ {{ session('error') }}
         </div>
 
         @endif
 
 
-        {{-- =========================
-         Stats
-    ========================== --}}
+        <!-- Statistics -->
 
         <div class="stats">
 
-            <div class="card total">
+            <div class="stat-card">
 
-                <div class="num">
+                <div class="stat-number">
                     {{ $stats['total'] }}
                 </div>
 
-                <div class="label">
+                <div class="stat-label">
                     Total Webhooks
                 </div>
 
             </div>
 
 
-            <div class="card pending">
+            <div class="stat-card pending">
 
-                <div class="num">
+                <div class="stat-number">
                     {{ $stats['pending'] }}
                 </div>
 
-                <div class="label">
+                <div class="stat-label">
                     Pending
                 </div>
 
             </div>
 
 
-            <div class="card processed">
+            <div class="stat-card processed">
 
-                <div class="num">
+                <div class="stat-number">
                     {{ $stats['processed'] }}
                 </div>
 
-                <div class="label">
+                <div class="stat-label">
                     Processed
                 </div>
 
             </div>
 
 
-            <div class="card failed">
+            <div class="stat-card failed">
 
-                <div class="num">
+                <div class="stat-number">
                     {{ $stats['failed'] }}
                 </div>
 
-                <div class="label">
+                <div class="stat-label">
                     Failed
                 </div>
 
             </div>
 
 
-            <div class="card duplicates">
+            <div class="stat-card duplicate">
 
-                <div class="num">
+                <div class="stat-number">
                     {{ $stats['duplicates'] }}
                 </div>
 
-                <div class="label">
+                <div class="stat-label">
                     Duplicate Webhooks
                 </div>
 
@@ -611,19 +548,39 @@
         </div>
 
 
-        {{-- =========================
-         Filters
-    ========================== --}}
+        <!-- Filters -->
 
         <div class="filter-box">
 
+            <div class="filter-title">
+                🔎 Search & Filter Webhooks
+            </div>
+
             <form
                 method="GET"
-                action="{{ route('webhook.dashboard') }}">
+                action="{{ route('webhook.dashboard') }}"
+                class="filter-form">
 
-                {{-- Status --}}
+                <!-- Search -->
 
-                <div>
+                <div class="form-group">
+
+                    <label>
+                        Search
+                    </label>
+
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ request('search') }}"
+                        placeholder="ID, webhook ID, source...">
+
+                </div>
+
+
+                <!-- Status -->
+
+                <div class="form-group">
 
                     <label>
                         Status
@@ -637,19 +594,19 @@
 
                         <option
                             value="pending"
-                            {{ request('status') == 'pending' ? 'selected' : '' }}>
+                            {{ request('status') === 'pending' ? 'selected' : '' }}>
                             Pending
                         </option>
 
                         <option
                             value="processed"
-                            {{ request('status') == 'processed' ? 'selected' : '' }}>
+                            {{ request('status') === 'processed' ? 'selected' : '' }}>
                             Processed
                         </option>
 
                         <option
                             value="failed"
-                            {{ request('status') == 'failed' ? 'selected' : '' }}>
+                            {{ request('status') === 'failed' ? 'selected' : '' }}>
                             Failed
                         </option>
 
@@ -658,9 +615,9 @@
                 </div>
 
 
-                {{-- Source --}}
+                <!-- Source -->
 
-                <div>
+                <div class="form-group">
 
                     <label>
                         Source
@@ -674,25 +631,25 @@
 
                         <option
                             value="general"
-                            {{ request('source') == 'general' ? 'selected' : '' }}>
+                            {{ request('source') === 'general' ? 'selected' : '' }}>
                             General
                         </option>
 
                         <option
                             value="stripe"
-                            {{ request('source') == 'stripe' ? 'selected' : '' }}>
+                            {{ request('source') === 'stripe' ? 'selected' : '' }}>
                             Stripe
                         </option>
 
                         <option
                             value="razorpay"
-                            {{ request('source') == 'razorpay' ? 'selected' : '' }}>
+                            {{ request('source') === 'razorpay' ? 'selected' : '' }}>
                             Razorpay
                         </option>
 
                         <option
                             value="whatsapp"
-                            {{ request('source') == 'whatsapp' ? 'selected' : '' }}>
+                            {{ request('source') === 'whatsapp' ? 'selected' : '' }}>
                             WhatsApp
                         </option>
 
@@ -701,9 +658,9 @@
                 </div>
 
 
-                {{-- Event Type --}}
+                <!-- Event -->
 
-                <div>
+                <div class="form-group">
 
                     <label>
                         Event Type
@@ -713,14 +670,14 @@
                         type="text"
                         name="event_type"
                         value="{{ request('event_type') }}"
-                        placeholder="e.g. order.created">
+                        placeholder="order.created">
 
                 </div>
 
 
-                {{-- Date --}}
+                <!-- Date -->
 
-                <div>
+                <div class="form-group">
 
                     <label>
                         Date
@@ -734,9 +691,9 @@
                 </div>
 
 
-                {{-- Duplicate --}}
+                <!-- Duplicate -->
 
-                <div>
+                <div class="form-group">
 
                     <label>
                         Duplicate
@@ -765,7 +722,7 @@
                 </div>
 
 
-                {{-- Buttons --}}
+                <!-- Filter -->
 
                 <div>
 
@@ -788,11 +745,18 @@
         </div>
 
 
-        {{-- =========================
-         Table
-    ========================== --}}
+        <!-- Table -->
 
         <div class="table-box">
+
+            <div class="table-header">
+
+                <h2>
+                    📋 Webhook Logs
+                </h2>
+
+            </div>
+
 
             <div class="table-wrapper">
 
@@ -803,7 +767,7 @@
                         <tr>
 
                             <th>
-                                #ID
+                                ID
                             </th>
 
                             <th>
@@ -811,7 +775,7 @@
                             </th>
 
                             <th>
-                                Event Type
+                                Event
                             </th>
 
                             <th>
@@ -827,7 +791,7 @@
                             </th>
 
                             <th>
-                                Received At
+                                Received
                             </th>
 
                             <th>
@@ -843,9 +807,8 @@
 
                         @forelse($logs as $log)
 
-                        <tr class="{{ $log->is_duplicate ? 'duplicate-row' : '' }}">
-
-                            {{-- ID --}}
+                        <tr
+                            class="{{ $log->is_duplicate ? 'duplicate-row' : '' }}">
 
                             <td>
 
@@ -856,38 +819,43 @@
                             </td>
 
 
-                            {{-- Source --}}
-
                             <td>
 
                                 <span class="badge badge-source">
-                                    {{ $log->source }}
+
+                                    {{ ucfirst($log->source) }}
+
                                 </span>
 
                             </td>
 
 
-                            {{-- Event Type --}}
-
                             <td>
+
                                 {{ $log->event_type ?? '—' }}
+
                             </td>
 
-
-                            {{-- Status --}}
 
                             <td>
 
-                                <span class="badge badge-{{ $log->status }}">
+                                @if($log->is_duplicate)
 
-                                    {{ ucfirst($log->status) }}
-
+                                <span class="badge badge-duplicate">
+                                    🔁 Duplicate
                                 </span>
+
+                                @else
+
+                                <span
+                                    class="badge badge-{{ $log->status }}">
+                                    {{ ucfirst($log->status) }}
+                                </span>
+
+                                @endif
 
                             </td>
 
-
-                            {{-- Duplicate Type --}}
 
                             <td>
 
@@ -908,14 +876,12 @@
                             </td>
 
 
-                            {{-- Retries --}}
-
                             <td>
+
                                 {{ $log->retry_count }}
+
                             </td>
 
-
-                            {{-- Received At --}}
 
                             <td>
 
@@ -924,15 +890,13 @@
                             </td>
 
 
-                            {{-- Actions --}}
-
                             <td>
 
                                 <div class="actions">
 
                                     <a
                                         href="{{ route('webhook.show', $log->id) }}"
-                                        class="btn-sm btn-view">
+                                        class="btn-small btn-view">
                                         👁 View
                                     </a>
 
@@ -941,14 +905,13 @@
 
                                     <form
                                         method="POST"
-                                        action="{{ route('webhook.replay', $log->id) }}"
-                                        style="display:inline">
+                                        action="{{ route('webhook.replay', $log->id) }}">
 
                                         @csrf
 
                                         <button
                                             type="submit"
-                                            class="btn-sm btn-replay">
+                                            class="btn-small btn-replay">
                                             🔄 Replay
                                         </button>
 
@@ -969,7 +932,9 @@
                             <td
                                 colspan="8"
                                 class="empty">
-                                No webhook logs found.
+
+                                📭 No webhook logs found.
+
                             </td>
 
                         </tr>
@@ -983,13 +948,30 @@
             </div>
 
 
-            {{-- Pagination --}}
+            <!-- Pagination -->
 
-            <div class="pagination">
+            @if($logs->hasPages())
 
-                {{ $logs->links() }}
+            <div class="pagination-wrapper">
+
+                @if ($logs->hasPages())
+                <div class="d-flex justify-content-center mt-4">
+                    <div class="custom-pagination">
+
+                        @for ($page = 1; $page <= $logs->lastPage(); $page++)
+                            <a href="{{ $logs->url($page) }}"
+                                class="{{ $page == $logs->currentPage() ? 'active' : '' }}">
+                                {{ $page }}
+                            </a>
+                            @endfor
+
+                    </div>
+                </div>
+                @endif
 
             </div>
+
+            @endif
 
         </div>
 
